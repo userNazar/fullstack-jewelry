@@ -1,13 +1,16 @@
 'use client';
 
+import IProduct from "@/interfaces/IProduct";
 import { setName, setType } from "@/redux/features/search-Slicer";
 import { useAppDispatch } from "@/redux/hooks";
+import productService from "@/services/productService";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 
 const SearchingPanel = () => {
 
     const [searchText, setSearchText] = useState<string>('');
+    // const [products, setProducts] = useState<IProduct[] | undefined>();
     const dispatch = useAppDispatch();
 
     const router = useRouter();
@@ -23,9 +26,16 @@ const SearchingPanel = () => {
 
     };
 
-    useEffect(() => {
-        dispatch(setType('Search'))
-    }, []);
+//   useEffect(() => {
+//         if (searchText.trim()) {
+//             const fetchProducts = async () => {
+//                 const foundProducts = await productService.getFindSeachProduct(searchText);
+//                 setProducts(foundProducts);
+//             };
+
+//             fetchProducts();
+//         }
+//     }, [searchText]);
 
     return (
         <form onSubmit={onSubmit} className="container mx-auto mt-10 px-10">

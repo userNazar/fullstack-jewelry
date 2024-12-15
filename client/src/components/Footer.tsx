@@ -63,7 +63,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className="text-center m-5">
-                © M&CO. 2023
+                © M&CO. {new Date().getFullYear()}
             </div>
         </footer>
     )

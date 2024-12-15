@@ -14,3 +14,8 @@ export interface DeleteProductFromRequestBody {
     userId?: mongoose.Types.ObjectId;
     productId?:  mongoose.Types.ObjectId;
 }
+
+export interface BuyProductsRequestBody {
+    email?: string;
+    products?: Array<Product>;
+}

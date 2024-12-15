@@ -39,6 +39,15 @@ class CartService {
             console.error(error);
         }
     }
+
+    async buy(email: string, products: Array<IProduct>) {
+        try {
+            const { data } = await $api.post<ICart>('http://localhost:5000/api/cart/buycart', { email, products }, { withCredentials: true });
+            return data;
+        } catch (error) {
+            console.error(error);
+        }
+    }
 }
 // eslint-disable-next-line import/no-anonymous-default-export
 export default new CartService();

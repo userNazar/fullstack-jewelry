@@ -1,9 +1,10 @@
 import { RequestHandler } from "express";
-import { AddProductRequestBody, DeleteProductFromRequestBody, GetCartRequestBody } from "../interfaces/carts-interface";
+import { AddProductRequestBody, BuyProductsRequestBody, DeleteProductFromRequestBody, GetCartRequestBody } from "../interfaces/carts-interface";
 import createHttpError from "http-errors";
 import mongoose from "mongoose";
 import cartService from "../services/cart-service";
 import { Product } from "../interfaces/products-interface";
+import mailService from "../services/mail-service";
 
 
 
@@ -59,7 +60,7 @@ class CartsControllers {
 
             res.status(200).json(cart);
         } catch (error) {
-            next(error); 
+            next(error);
         }
     }
 
@@ -73,6 +74,21 @@ class CartsControllers {
             const cart = await cartService.deleteFromWish(userId, productId);
 
             res.status(200).json(cart);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    buyProducts: RequestHandler<unknown, unknown, BuyProductsRequestBody, unknown> = async (req, res, next) => {
+        try {
+            const { email, products } = req.body;
+            if (!email || !products || products.length < 1) {
+                throw createHttpError(400, 'Credentials is missing!')
+            }
+
+            const send = await mailService.sendConfirmBuying(email, products);
+
+            res.status(200).json(send);
         } catch (error) {
             next(error);
         }

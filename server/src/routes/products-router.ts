@@ -10,5 +10,6 @@ router.get('/:name', productsController.filterByName);
 router.get('/product/:_id', productsController.getOneProduct);
 router.post('/create', adminMiddleware, productsController.createProduct);
 router.post('/delete', adminMiddleware, productsController.deleteProduct);
+router.get('/search/:name', productsController.findBySearch);
 
 export default router;

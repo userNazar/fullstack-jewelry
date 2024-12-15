@@ -8,6 +8,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ItemCard from "./ItemCard";
+import cartSevice from "@/services/cartSevice";
 
 export default function Page() {
 
@@ -22,6 +23,20 @@ export default function Page() {
     }
 
     const buttonHandler = () => {
+        if (!user.isActivated) {
+            toast.error('Activate your account', {
+                position: "top-center",
+                autoClose: 300,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            return;
+        }
+
         if (!cart?.cartList) {
             toast.error('List empty!', {
                 position: "top-center",
@@ -46,6 +61,8 @@ export default function Page() {
             progress: undefined,
             theme: "light",
         });
+
+        cartSevice.buy(user.email, cart.cartList);
     }
 
 

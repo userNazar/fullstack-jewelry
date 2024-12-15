@@ -28,3 +28,7 @@ export interface FilterByNameRequestParams {
 
 export interface DeleteProductRequestBody extends IDofProduct { }
 export interface GetOneProductRequestParams extends IDofProduct { }
+
+export interface FindBySearchParams {
+    name?: string;
+}

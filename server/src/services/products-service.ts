@@ -25,8 +25,19 @@ class ProductService {
         return product;
     }
 
+    async findBySearch(name: string) {
+        const searchNormalized = name.trim().toUpperCase();
+
+        const products = await Product.find({
+            name: { $regex: searchNormalized, $options: 'i' }
+        });
+    
+        return products;
+    }
+
+
     async filterByName(name: string) {
-        const regex = new RegExp(name, 'i'); 
+        const regex = new RegExp(name, 'i');
 
         const products = await Product.find({ name: { $regex: regex } });
         if (products.length === 0) {

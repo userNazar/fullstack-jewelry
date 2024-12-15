@@ -9,5 +9,6 @@ router.post('/add', authMiddleware, cartsController.addProductCart);
 router.post('/addwish', authMiddleware, cartsController.addProductWish);
 router.post('/removewish', authMiddleware, cartsController.removeProductWish);
 router.post('/removecart', authMiddleware, cartsController.removeProductCart);
+router.post('/buycart', authMiddleware, cartsController.buyProducts);
 
-export default router;
+export default router; 

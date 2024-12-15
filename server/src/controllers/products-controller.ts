@@ -1,10 +1,9 @@
 import { RequestHandler } from "express";
 import createHttpError from "http-errors";
-import { CreateProductRequestBody, DeleteProductRequestBody, FilterByNameRequestParams, GetOneProductRequestParams, Product } from "../interfaces/products-interface";
+import { CreateProductRequestBody, DeleteProductRequestBody, FilterByNameRequestParams, FindBySearchParams, GetOneProductRequestParams, Product } from "../interfaces/products-interface";
 import productsService from "../services/products-service";
 
 class ProductController {
-
     getAllProducts: RequestHandler = async (req, res, next) => {
         try {
             const products = await productsService.getAllProducts();
@@ -31,6 +30,21 @@ class ProductController {
         }
     }
 
+    findBySearch: RequestHandler<FindBySearchParams, unknown, unknown, unknown> = async (req, res, next) => {
+        try {
+            const name = req.params.name;
+
+            if (!name) {
+                throw createHttpError(400, 'Name is required as a search criterion');
+            }
+
+            const products = await productsService.findBySearch(name);
+
+            res.json(products);
+        } catch (error) {
+            next(error);
+        }
+    };
 
     filterByName: RequestHandler<FilterByNameRequestParams, unknown, unknown, unknown> = async (req, res, next) => {
         try {
@@ -46,13 +60,11 @@ class ProductController {
         }
     }
 
-
     // for Admin only!
     createProduct: RequestHandler<unknown, unknown, CreateProductRequestBody, unknown> = async (req, res, next) => {
         try {
             const productData = req.body;
             const picture = req.files?.picture;
-
 
             const { name, price, stock, weight, country, series, ringWidth, metalColor, ringDesign, sex }: Product = this.validateProductData(productData);
             const product = await productsService.createProduct(name, price, stock, weight, country, series, ringWidth, metalColor, ringDesign, sex, picture);
@@ -77,6 +89,7 @@ class ProductController {
             next(error);
         }
     }
+
     private validateProductData(productData: Product): Product {
         const { name, price, stock, weight, country, series, ringWidth, metalColor, ringDesign, sex } = productData;
         if (!name || !price || !stock || !weight || !country || !series || !ringWidth || !metalColor || !ringDesign || !sex) {
