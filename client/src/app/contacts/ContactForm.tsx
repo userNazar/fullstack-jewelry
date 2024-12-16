@@ -1,7 +1,9 @@
 'use client'
 
 import { useAppSelector } from "@/redux/hooks";
+import contactService from "@/services/contactService";
 import { FormEvent, useState } from "react"
+import { ToastContainer, toast } from 'react-toastify';
 
 const ContactForm = () => {
 
@@ -14,6 +16,45 @@ const ContactForm = () => {
 
     const submitHanlder = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+
+        try {
+            contactService.sendContactMessage(
+                'TO EMAIL CHANGE ON ENV',
+                email,
+                firstName,
+                lastName,
+                helpText
+            );
+
+            toast.success('Message sent successfully!', {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+
+            setFirstName('');
+            setLastName('');
+            setHelpText('');
+        } catch (error) {
+            toast.error('Failed to send message. Please try again.', {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+
+            console.error(error);
+        }
     }
 
     return (
@@ -61,6 +102,7 @@ const ContactForm = () => {
             >
                 Send
             </button>
+            <ToastContainer />
         </form>
     )
 }

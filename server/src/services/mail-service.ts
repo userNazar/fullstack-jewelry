@@ -37,6 +37,32 @@ class MailService {
         }
     }
 
+    async sendContactEmail(to: string, from: string, firstName: string, lastName: string, letter: string) {
+        try {
+            await this.transporter.sendMail({
+                from: env.SMTP_MAIL,
+                to,
+                subject: 'Activating to ' + env.API_URL,
+                text: '',
+                html: `
+            <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <h2 style="color: #4CAF50;">Letter from ${firstName} ${lastName},</h2>
+                <p>${letter}</p>
+                <br>
+                <p>Best regards</p>
+                <p>Contact us part!</p>
+                <hr style="border: 1px solid #ddd;">
+                <p style="font-size: 0.9em; color: #888;">
+                    This message was sent by ${from}.
+                </p>
+            </div>
+        `
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async sendConfirmBuying(to: string, products: Array<Product>) {
         try {
             const productRows = products.map(product => `
@@ -53,7 +79,7 @@ class MailService {
                     <td style="border: 1px solid #ddd; padding: 8px;">${product.sex}</td>
                 </tr>
             `).join('');
-    
+
             await this.transporter.sendMail({
                 from: env.SMTP_MAIL,
                 to,
@@ -87,13 +113,13 @@ class MailService {
                     </div>
                     <p style="font-size: 14px; line-height: 1.5; color: #777; margin-top: 30px; text-align: center;">If you did not make this purchase, please ignore this email.</p>
                 </div>
-            `            
+            `
             });
         } catch (error) {
             console.log(error);
         }
     }
-}    
+}
 
 
 export default new MailService();
